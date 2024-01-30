@@ -8,9 +8,12 @@ import { counterReducer } from "./Counter/State/counter.reducer";
 import { BrowserModule } from "@angular/platform-browser";
 import { CustomInputComponent } from "./Counter/custom-input/custom-input.component";
 import { FormsModule } from "@angular/forms";
+import { HomeComponent } from './home/home.component';
+import { HeaderComponent } from './shared/components/header/header.component';
+import { PostsListComponent } from './posts/posts-list/posts-list.component';
 
 @NgModule({
-  declarations: [AppComponent, CounterComponent, CustomInputComponent],
+  declarations: [AppComponent, CounterComponent, CustomInputComponent, HomeComponent, HeaderComponent, PostsListComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
