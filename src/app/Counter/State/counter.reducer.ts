@@ -1,5 +1,11 @@
 import { createReducer, on } from "@ngrx/store";
-import { custom_input, decrement, increment, Reset } from "./counter.action";
+import {
+  custom_input,
+  decrement,
+  increment,
+  Reset,
+  change_courseName,
+} from "./counter.action";
 import { initialSate } from "./counter.state";
 
 const _counterReducer = createReducer(
@@ -36,6 +42,16 @@ const _counterReducer = createReducer(
     return {
       ...state,
       counter: state.counter + action.value,
+    };
+  }),
+
+  //change course Name
+  on(change_courseName, (state, action) => {
+    console.log(action);
+    return {
+      ...state,
+      courseName: "Java",
+      //counter: state.counter + action.value,
     };
   })
 );

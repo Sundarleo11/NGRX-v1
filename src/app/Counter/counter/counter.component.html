@@ -1,6 +1,6 @@
 <div class="container text-center mt-3">
   <div class=".py-4">
-    <h3>Counter : {{ (counter$ | async).counter }}</h3>
+    <h3>Counter : {{ counter$ | async }}</h3>
     <button class="btn btn-primary" (click)="OnIncrement()">Increment</button
     >&nbsp;
     <button class="btn btn-warning" (click)="OnDecrement()">Decrement</button
@@ -8,3 +8,7 @@
     <button class="btn btn-info" (click)="OnReset()">Reset</button>
   </div>
 </div>
+<div>
+  <p>{{ CourseName$ | async }}</p>
+</div>
+<app-custom-input></app-custom-input>

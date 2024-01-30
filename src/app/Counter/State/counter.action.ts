@@ -8,3 +8,8 @@ export const custom_input = createAction(
   "custom-input",
   props<{ value: number }>()
 );
+
+export const change_courseName = createAction(
+  "change-courseName"
+  // props<{ value: number }>()
+);
