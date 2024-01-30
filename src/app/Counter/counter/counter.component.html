@@ -1,8 +1,10 @@
-<div class="container text-align-center">
-  <h3>Counter : {{ counter }}</h3>
-  <button class="btn btn-primary" (click)="OnIncrement()">Increment</button
-  >&nbsp;
-  <button class="btn btn-warning" (click)="OnDecrement()">Decrement</button
-  >&nbsp;
-  <button class="btn btn-info" (click)="OnReset()">Reset</button>
+<div class="container text-center mt-3">
+  <div class=".py-4">
+    <h3>Counter : {{ (counter$ | async).counter }}</h3>
+    <button class="btn btn-primary" (click)="OnIncrement()">Increment</button
+    >&nbsp;
+    <button class="btn btn-warning" (click)="OnDecrement()">Decrement</button
+    >&nbsp;
+    <button class="btn btn-info" (click)="OnReset()">Reset</button>
+  </div>
 </div>

@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { decrement, increment, Reset } from "./counter.action";
+import { custom_input, decrement, increment, Reset } from "./counter.action";
 import { initialSate } from "./counter.state";
 
 const _counterReducer = createReducer(
@@ -27,6 +27,15 @@ const _counterReducer = createReducer(
     return {
       ...state,
       counter: 0,
+    };
+  }),
+
+  // custom-input
+  on(custom_input, (state, action) => {
+    console.log(action);
+    return {
+      ...state,
+      counter: state.counter + action.value,
     };
   })
 );
