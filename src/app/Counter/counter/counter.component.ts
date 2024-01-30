@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
+import { Observable } from "rxjs/internal/Observable";
 import { decrement, increment, Reset } from "../State/counter.action";
+import { CounterState } from "../State/counter.state";
 
 @Component({
   selector: "app-counter",
@@ -8,13 +10,16 @@ import { decrement, increment, Reset } from "../State/counter.action";
   styleUrls: ["./counter.component.css"],
 })
 export class CounterComponent implements OnInit {
-  counter: number;
-  constructor(private store: Store<{ counter: { counter: number } }>) {}
+  // to destory unsubcribe
+  counter$: Observable<{ counter: number }>;
+  constructor(private store: Store<{ counter: CounterState }>) {}
 
   ngOnInit() {
-    this.store.select("counter").subscribe((data) => {
-      this.counter = data.counter;
-    });
+    this.selectDataUsingObserable();
+  }
+
+  private selectDataUsingObserable() {
+    this.counter$ = this.store.select("counter");
   }
 
   OnIncrement() {
