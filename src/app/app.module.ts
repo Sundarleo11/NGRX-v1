@@ -8,17 +8,29 @@ import { counterReducer } from "./Counter/State/counter.reducer";
 import { BrowserModule } from "@angular/platform-browser";
 import { CustomInputComponent } from "./Counter/custom-input/custom-input.component";
 import { FormsModule } from "@angular/forms";
-import { HomeComponent } from './home/home.component';
-import { HeaderComponent } from './shared/components/header/header.component';
-import { PostsListComponent } from './posts/posts-list/posts-list.component';
+import { HomeComponent } from "./home/home.component";
+import { HeaderComponent } from "./shared/components/header/header.component";
+import { PostsListComponent } from "./posts/posts-list/posts-list.component";
+import { environment } from "src/environments/environment";
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 
 @NgModule({
-  declarations: [AppComponent, CounterComponent, CustomInputComponent, HomeComponent, HeaderComponent, PostsListComponent],
+  declarations: [
+    AppComponent,
+    CounterComponent,
+    CustomInputComponent,
+    HomeComponent,
+    HeaderComponent,
+    PostsListComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     StoreModule.forRoot({ counter: counterReducer }),
+    StoreDevtoolsModule.instrument({
+      logOnly: environment.production,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
