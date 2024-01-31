@@ -13,6 +13,8 @@ import { HeaderComponent } from "./shared/components/header/header.component";
 import { PostsListComponent } from "./posts/posts-list/posts-list.component";
 import { environment } from "src/environments/environment";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { postsReducer } from "./posts/State/posts.reducer";
+import { appReducer } from "./Appstore/app.store";
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { StoreDevtoolsModule } from "@ngrx/store-devtools";
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    StoreModule.forRoot({ counter: counterReducer }),
+    // StoreModule.forRoot({ counter: counterReducer, posts: postsReducer }),
+    StoreModule.forRoot(appReducer),
     StoreDevtoolsModule.instrument({
       logOnly: environment.production,
     }),
