@@ -15,10 +15,10 @@ export class PostsListComponent implements OnInit {
   constructor(private store: Store<appState>) {}
 
   ngOnInit() {
-    this.start();
+    this.onload();
   }
 
-  private start() {
+  private onload() {
     this.posts = this.store.select(getPosts);
   }
 }
