@@ -17,7 +17,7 @@ import { appReducer } from "./Appstore/app.store";
     BrowserModule,
     AppRoutingModule,
     //StoreModule.forRoot({ counter: counterReducer, posts: postsReducer }),
-    StoreModule.forRoot(appReducer),
+    StoreModule.forRoot({}),
     StoreDevtoolsModule.instrument({
       logOnly: environment.production,
     }),
