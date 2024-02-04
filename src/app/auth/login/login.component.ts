@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Store } from "@ngrx/store";
 import { appState } from "src/app/Appstore/app.store";
-import { loginStart } from "./State/auth.action";
+import { loginStart } from "../State/auth.action";
 
 @Component({
   selector: "app-login",
