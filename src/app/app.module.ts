@@ -8,6 +8,8 @@ import { HeaderComponent } from "./shared/components/header/header.component";
 import { environment } from "src/environments/environment";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { appReducer } from "./Appstore/app.store";
+import { EffectsModule } from "@ngrx/effects";
+import { HttpClientModule } from "@angular/common/http";
 //import { counterReducer } from "./Counter/State/counter.reducer";
 //import { postsReducer } from "./posts/State/posts.reducer";
 
@@ -16,8 +18,10 @@ import { appReducer } from "./Appstore/app.store";
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     //StoreModule.forRoot({ counter: counterReducer, posts: postsReducer }),
     StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       logOnly: environment.production,
     }),
