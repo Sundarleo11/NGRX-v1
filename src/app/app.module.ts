@@ -8,16 +8,27 @@ import { HeaderComponent } from "./shared/components/header/header.component";
 import { environment } from "src/environments/environment";
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { appReducer } from "./Appstore/app.store";
+import { EffectsModule } from "@ngrx/effects";
+import { HttpClientModule } from "@angular/common/http";
+import { LoadingSpinnerComponent } from "./shared/loading-spinner/loading-spinner.component";
+
 //import { counterReducer } from "./Counter/State/counter.reducer";
 //import { postsReducer } from "./posts/State/posts.reducer";
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, HeaderComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    HeaderComponent,
+    LoadingSpinnerComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     //StoreModule.forRoot({ counter: counterReducer, posts: postsReducer }),
-    StoreModule.forRoot({}),
+    StoreModule.forRoot(appReducer),
+    EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
       logOnly: environment.production,
     }),
