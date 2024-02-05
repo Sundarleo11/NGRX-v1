@@ -24,11 +24,30 @@
           <a class="nav-link" href="#" [routerLink]="['/posts']">Posts</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" [routerLink]="['/auth']">Login</a>
+          <a
+            class="nav-link"
+            href="#"
+            [routerLink]="['/auth']"
+            *ngIf="!(isAuthenticate | async)"
+            >Login</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" [routerLink]="['/auth/signup']"
+          <a
+            class="nav-link"
+            href="#"
+            [routerLink]="['/auth/signup']"
+            *ngIf="!(isAuthenticate | async)"
             >Signup</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            href="#"
+            [routerLink]="['/auth']"
+            *ngIf="isAuthenticate | async"
+            >Logout</a
           >
         </li>
       </ul>
