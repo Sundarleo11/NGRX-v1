@@ -10,9 +10,16 @@ import { Observable } from "rxjs";
 })
 export class AuthService {
   constructor(private http: HttpClient) {}
-  login(email: string, password: string) {
+  login(email: string, password: string): Observable<AuthResponseData> {
     return this.http.post(
       `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.FIRBASE_API_KEY}`,
+      { email, password, returnSecureToken: true }
+    );
+  }
+
+  signUp(email: string, password: string): Observable<AuthResponseData> {
+    return this.http.post<AuthResponseData>(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.FIRBASE_API_KEY}`,
       { email, password, returnSecureToken: true }
     );
   }
@@ -36,6 +43,8 @@ export class AuthService {
         return "Email Not Found";
       case "INVALID_PASSWORD":
         return "Invalid Password";
+      case "EMAIL_EXISTS":
+        return "email already exists";
       default:
         return "Unknown error occurred. Please try again";
     }
