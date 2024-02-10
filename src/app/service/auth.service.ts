@@ -4,13 +4,16 @@ import { Injectable } from "@angular/core";
 import { AuthResponseData } from "../model/AuthResponseData";
 import { User } from "../model/user.model";
 import { Observable } from "rxjs";
+import { Store } from "@ngrx/store";
+import { appState } from "../Appstore/app.store";
+import { autologout } from "../auth/State/auth.action";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
   timeOutInterval: any;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private store: Store<appState>) {}
 
   login(email: string, password: string): Observable<AuthResponseData> {
     return this.http.post(
@@ -64,7 +67,9 @@ export class AuthService {
 
     const TimeInterval = expiresDate - TodayDate;
 
-    this.timeOutInterval = setTimeout(() => {}, TimeInterval);
+    this.timeOutInterval = setTimeout(() => {
+      this.store.dispatch(autologout());
+    }, TimeInterval);
   }
 
   getUserFromLocalStroage() {
@@ -84,5 +89,14 @@ export class AuthService {
       return user;
     }
     return null;
+  }
+
+  logout() {
+    localStorage.removeItem("userdata");
+    if (this.timeOutInterval) {
+      clearTimeout(this.timeOutInterval);
+      this.timeOutInterval = null;
+    }
+    // throw new Error("Method not implemented.");
   }
 }
