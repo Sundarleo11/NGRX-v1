@@ -1,6 +1,7 @@
 //import { AuthService } from "./../../services/auth.service";
-import { exhaustMap, map, catchError, tap } from "rxjs/operators";
+import { exhaustMap, map, catchError, tap, mergeMap } from "rxjs/operators";
 import {
+  autoLogin,
   loginStart,
   loginsuccess,
   SignupStart,
@@ -16,7 +17,6 @@ import {
 } from "src/app/Appstore/Shared/shared.action";
 import { appState } from "src/app/Appstore/app.store";
 import { of } from "rxjs";
-import { dispatch } from "rxjs/internal/observable/pairs";
 import { Router } from "@angular/router";
 
 @Injectable()
@@ -37,6 +37,7 @@ export class AuthEffects {
             this.store.dispatch(setLoadingSpinner({ status: false }));
             this.store.dispatch(setErrorMessage({ message: "" }));
             const user = this.authService.formatUser(data);
+            this.authService.setUserInLocalStorage(user);
             return loginsuccess({ user });
           }),
           catchError((errResp) => {
@@ -85,6 +86,7 @@ export class AuthEffects {
           map((data) => {
             this.store.dispatch(setLoadingSpinner({ status: true }));
             const user = this.authService.formatUser(data);
+            this.authService.setUserInLocalStorage(user);
             return signupsuccess({ user });
           }),
           catchError((errResp) => {
@@ -98,4 +100,17 @@ export class AuthEffects {
       })
     );
   });
+
+  autoLogin$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(autoLogin),
+        map((action) => {
+          const user = this.authService.getUserFromLocalStroage();
+          console.log(user);
+        })
+      );
+    },
+    { dispatch: false }
+  );
 }

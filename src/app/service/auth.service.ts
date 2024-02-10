@@ -9,7 +9,9 @@ import { Observable } from "rxjs";
   providedIn: "root",
 })
 export class AuthService {
+  timeOutInterval: any;
   constructor(private http: HttpClient) {}
+
   login(email: string, password: string): Observable<AuthResponseData> {
     return this.http.post(
       `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.FIRBASE_API_KEY}`,
@@ -48,5 +50,39 @@ export class AuthService {
       default:
         return "Unknown error occurred. Please try again";
     }
+  }
+
+  setUserInLocalStorage(user: User) {
+    localStorage.setItem("userdata", JSON.stringify(user));
+
+    this.runTimeoutInterval(user);
+  }
+
+  runTimeoutInterval(user: User) {
+    const TodayDate = new Date().getTime();
+    const expiresDate = user.expireDate.getTime();
+
+    const TimeInterval = expiresDate - TodayDate;
+
+    this.timeOutInterval = setTimeout(() => {}, TimeInterval);
+  }
+
+  getUserFromLocalStroage() {
+    const userDataString = localStorage.getItem("userdata");
+
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      const expirationDate = new Date(userData.expirationDate);
+      const user = new User(
+        userData.email,
+        userData.token,
+        userData.localId,
+        expirationDate
+      );
+
+      this.runTimeoutInterval(user);
+      return user;
+    }
+    return null;
   }
 }
