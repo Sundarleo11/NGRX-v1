@@ -1,6 +1,13 @@
 //import { AuthService } from "./../../services/auth.service";
-import { exhaustMap, map, catchError, tap } from "rxjs/operators";
-import { loginStart, loginsuccess } from "./auth.action";
+import { exhaustMap, map, catchError, tap, mergeMap } from "rxjs/operators";
+import {
+  autoLogin,
+  autologout,
+  loginStart,
+  loginsuccess,
+  SignupStart,
+  signupsuccess,
+} from "./auth.action";
 import { Actions, createEffect, ofType } from "@ngrx/effects";
 import { Injectable } from "@angular/core";
 import { AuthService } from "src/app/service/auth.service";
@@ -11,7 +18,6 @@ import {
 } from "src/app/Appstore/Shared/shared.action";
 import { appState } from "src/app/Appstore/app.store";
 import { of } from "rxjs";
-import { dispatch } from "rxjs/internal/observable/pairs";
 import { Router } from "@angular/router";
 
 @Injectable()
@@ -32,7 +38,8 @@ export class AuthEffects {
             this.store.dispatch(setLoadingSpinner({ status: false }));
             this.store.dispatch(setErrorMessage({ message: "" }));
             const user = this.authService.formatUser(data);
-            return loginsuccess({ user });
+            this.authService.setUserInLocalStorage(user);
+            return loginsuccess({ user, redirect: true });
           }),
           catchError((errResp) => {
             this.store.dispatch(setLoadingSpinner({ status: false }));
@@ -49,9 +56,62 @@ export class AuthEffects {
   loginRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(loginsuccess),
+        ofType(...[loginsuccess, signupsuccess]),
         tap((action) => {
-          this.router.navigate(["/"]);
+          this.store.dispatch(setErrorMessage({ message: "" }));
+          if (action.redirect) {
+            this.router.navigate(["/"]);
+          }
+        })
+      );
+    },
+    { dispatch: false }
+  );
+
+  signUp$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(SignupStart),
+      exhaustMap((action) => {
+        return this.authService.signUp(action.email, action.password).pipe(
+          map((data) => {
+            this.store.dispatch(setLoadingSpinner({ status: true }));
+            const user = this.authService.formatUser(data);
+            this.authService.setUserInLocalStorage(user);
+            return signupsuccess({ user, redirect: true });
+          }),
+          catchError((errResp) => {
+            this.store.dispatch(setLoadingSpinner({ status: false }));
+            const errorMessage = this.authService.getErrorMessage(
+              errResp.error.error.message
+            );
+            return of(setErrorMessage({ message: errorMessage }));
+          })
+        );
+      })
+    );
+  });
+
+  autoLogin$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(autoLogin),
+        mergeMap((action) => {
+          const user = this.authService.getUserFromLocalStroage();
+          console.log(user);
+          return of(loginsuccess({ user, redirect: false }));
+        })
+      );
+    }
+    // { dispatch: false }
+  );
+
+  autoLogout$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(autologout),
+        map((action) => {
+          this.authService.logout();
+          this.router.navigate(["auth"]);
         })
       );
     },

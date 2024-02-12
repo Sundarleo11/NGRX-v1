@@ -11,6 +11,7 @@ import { appReducer } from "./Appstore/app.store";
 import { EffectsModule } from "@ngrx/effects";
 import { HttpClientModule } from "@angular/common/http";
 import { LoadingSpinnerComponent } from "./shared/loading-spinner/loading-spinner.component";
+import { AuthEffects } from "./auth/State/auth_effects";
 
 //import { counterReducer } from "./Counter/State/counter.reducer";
 //import { postsReducer } from "./posts/State/posts.reducer";
@@ -28,7 +29,7 @@ import { LoadingSpinnerComponent } from "./shared/loading-spinner/loading-spinne
     HttpClientModule,
     //StoreModule.forRoot({ counter: counterReducer, posts: postsReducer }),
     StoreModule.forRoot(appReducer),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AuthEffects]),
     StoreDevtoolsModule.instrument({
       logOnly: environment.production,
     }),

@@ -4,15 +4,27 @@ import { Injectable } from "@angular/core";
 import { AuthResponseData } from "../model/AuthResponseData";
 import { User } from "../model/user.model";
 import { Observable } from "rxjs";
+import { Store } from "@ngrx/store";
+import { appState } from "../Appstore/app.store";
+import { autologout } from "../auth/State/auth.action";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
-  login(email: string, password: string) {
+  timeOutInterval: any;
+  constructor(private http: HttpClient, private store: Store<appState>) {}
+
+  login(email: string, password: string): Observable<AuthResponseData> {
     return this.http.post(
       `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.FIRBASE_API_KEY}`,
+      { email, password, returnSecureToken: true }
+    );
+  }
+
+  signUp(email: string, password: string): Observable<AuthResponseData> {
+    return this.http.post<AuthResponseData>(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.FIRBASE_API_KEY}`,
       { email, password, returnSecureToken: true }
     );
   }
@@ -36,8 +48,55 @@ export class AuthService {
         return "Email Not Found";
       case "INVALID_PASSWORD":
         return "Invalid Password";
+      case "EMAIL_EXISTS":
+        return "email already exists";
       default:
         return "Unknown error occurred. Please try again";
     }
+  }
+
+  setUserInLocalStorage(user: User) {
+    localStorage.setItem("userdata", JSON.stringify(user));
+
+    this.runTimeoutInterval(user);
+  }
+
+  runTimeoutInterval(user: User) {
+    const TodayDate = new Date().getTime();
+    const expiresDate = user.expireDate.getTime();
+
+    const TimeInterval = expiresDate - TodayDate;
+
+    this.timeOutInterval = setTimeout(() => {
+      this.store.dispatch(autologout());
+    }, TimeInterval);
+  }
+
+  getUserFromLocalStroage() {
+    const userDataString = localStorage.getItem("userdata");
+
+    if (userDataString) {
+      const userData = JSON.parse(userDataString);
+      const expirationDate = new Date(userData.expirationDate);
+      const user = new User(
+        userData.email,
+        userData.token,
+        userData.localId,
+        expirationDate
+      );
+
+      this.runTimeoutInterval(user);
+      return user;
+    }
+    return null;
+  }
+
+  logout() {
+    localStorage.removeItem("userdata");
+    if (this.timeOutInterval) {
+      clearTimeout(this.timeOutInterval);
+      this.timeOutInterval = null;
+    }
+    // throw new Error("Method not implemented.");
   }
 }
