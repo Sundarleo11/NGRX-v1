@@ -74,7 +74,7 @@ export class AuthEffects {
       exhaustMap((action) => {
         return this.authService.signUp(action.email, action.password).pipe(
           map((data) => {
-            this.store.dispatch(setLoadingSpinner({ status: true }));
+            this.store.dispatch(setLoadingSpinner({ status: false }));
             const user = this.authService.formatUser(data);
             this.authService.setUserInLocalStorage(user);
             return signupsuccess({ user, redirect: true });
@@ -91,19 +91,17 @@ export class AuthEffects {
     );
   });
 
-  autoLogin$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(autoLogin),
-        mergeMap((action) => {
-          const user = this.authService.getUserFromLocalStroage();
-          console.log(user);
-          return of(loginsuccess({ user, redirect: false }));
-        })
-      );
-    }
-    // { dispatch: false }
-  );
+  autoLogin$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(autoLogin),
+      mergeMap(() => {
+        const user = this.authService.getUserFromLocalStroage();
+        console.log(user);
+        return of(loginsuccess({ user, redirect: false }));
+      })
+    );
+  });
+  //{ dispatch: false }
 
   autoLogout$ = createEffect(
     () => {

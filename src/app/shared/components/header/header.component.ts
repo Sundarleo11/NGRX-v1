@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout(event: Event) {
-    event.preventDefault();
+    //event.preventDefault();
     this.store.dispatch(autologout());
   }
 }
