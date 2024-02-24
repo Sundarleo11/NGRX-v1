@@ -7,7 +7,7 @@
         <label>Title</label>
         <input type="text" class="form-control" formControlName="title" />
         <div
-          *ngIf="postForm.get('title').touched && !postForm.get('title').valid"
+          *ngIf="postForm.get('title').touched && postForm.get('title').valid"
         >
           <div *ngIf="postForm.get('title').errors.required">
             Title is required

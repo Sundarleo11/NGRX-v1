@@ -19,7 +19,7 @@
         <tr *ngFor="let post of posts | async">
           <td>{{ post.id }}</td>
           <td>{{ post.title }}</td>
-          <td>{{ post.decription }}</td>
+          <td>{{ post.description }}</td>
           <td>
             <a href="" class="btn btn-primary" [routerLink]="['edit', post.id]"
               >Edit</a
