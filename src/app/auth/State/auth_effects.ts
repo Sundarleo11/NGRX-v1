@@ -1,4 +1,3 @@
-//import { AuthService } from "./../../services/auth.service";
 import { exhaustMap, map, catchError, tap, mergeMap } from "rxjs/operators";
 import {
   autoLogin,
@@ -101,7 +100,6 @@ export class AuthEffects {
       })
     );
   });
-  //{ dispatch: false }
 
   autoLogout$ = createEffect(
     () => {
@@ -109,7 +107,7 @@ export class AuthEffects {
         ofType(autologout),
         map((action) => {
           this.authService.logout();
-          this.router.navigate(["auth"]);
+          return this.router.navigate(["auth"]);
         })
       );
     },

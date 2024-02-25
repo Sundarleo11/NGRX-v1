@@ -24,11 +24,7 @@ export class EditPostComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
-    this.onload();
-  }
-
-  private onload() {
+  ngOnInit(): void {
     this.route.paramMap.subscribe((param) => {
       const id = param.get("id");
 
@@ -39,6 +35,8 @@ export class EditPostComponent implements OnInit {
     });
   }
 
+  private onload() {}
+
   createForm() {
     this.postForm = new FormGroup({
       title: new FormControl(this.post.title, [
@@ -46,9 +44,9 @@ export class EditPostComponent implements OnInit {
         Validators.minLength(6),
       ]),
 
-      decription: new FormControl(this.post.decription, [
+      description: new FormControl(this.post.description, [
         Validators.required,
-        Validators.minLength(25),
+        Validators.minLength(6),
       ]),
     });
   }
@@ -57,12 +55,12 @@ export class EditPostComponent implements OnInit {
     console.log(this.postForm);
 
     const title = this.postForm.value.title;
-    const decription = this.postForm.value.decription;
+    const description = this.postForm.value.description;
 
     const post: Post = {
       id: this.post.id,
       title,
-      decription,
+      description,
     };
 
     this.store.dispatch(updatePost({ post }));
