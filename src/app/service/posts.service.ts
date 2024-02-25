@@ -40,4 +40,10 @@ export class PostsService {
       postData
     );
   }
+
+  DeletePost(id: String) {
+    return this.http.delete(
+      `https://vue-completecourse.firebaseio.com/posts/${id}.json`
+    );
+  }
 }

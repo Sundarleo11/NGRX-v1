@@ -11,6 +11,8 @@ export const UPDATE_POST_ACTION_SUCCESS = "[posts page] update post success";
 
 export const DELETE_POST_ACTION = "[posts page] delete post";
 
+export const DELETE_POST_ACTION_SUCCESS = "[posts page] delete post";
+
 export const LOAD_POST = "[posts page] load posts";
 
 export const LOAD_POSTS_SUCCESS = "[posts page] load posts success";
@@ -34,6 +36,11 @@ export const updatePostSuccess = createAction(
 
 export const deletePost = createAction(
   DELETE_POST_ACTION,
+  props<{ id: String }>()
+);
+
+export const deletePostSuccess = createAction(
+  DELETE_POST_ACTION_SUCCESS,
   props<{ id: String }>()
 );
 

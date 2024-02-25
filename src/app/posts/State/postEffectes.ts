@@ -8,6 +8,8 @@ import {
   addPost,
   updatePostSuccess,
   updatePost,
+  deletePost,
+  deletePostSuccess,
 } from "./posts.action";
 import { PostsService } from "src/app/service/posts.service";
 import { dispatch } from "rxjs/internal/observable/pairs";
@@ -62,5 +64,21 @@ export class PostsEffects {
       );
     }
     //  { dispatch: false }
+  );
+
+  DeletePosts$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(deletePost),
+        switchMap((action) => {
+          return this.postsService.DeletePost(action.id).pipe(
+            map((data) => {
+              return deletePostSuccess({ id: action.id });
+            })
+          );
+        })
+      );
+    }
+    //{ dispatch: false }
   );
 }
